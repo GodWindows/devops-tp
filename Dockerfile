@@ -5,7 +5,7 @@ WORKDIR /app
 # Install runtime dependencies for the FastAPI app
 RUN pip install --no-cache-dir fastapi uvicorn
 
-COPY app.py /app/app.py
+COPY . /app
 
 EXPOSE 8000
 
