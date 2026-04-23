@@ -21,10 +21,29 @@ Le pipeline CI (GitHub Actions) execute:
 	- tests unitaires (`tests/unit`)
 	- tests web (`tests/web`)
 	- couverture de code (`coverage.xml`)
+- 1 etape de qualite de code SonarQube (si credentials presents)
 
 La couverture est informative uniquement: elle n'est pas bloquante et ne fait pas echouer le workflow, quel que soit le resultat.
 
 Le fichier de couverture est publie comme artifact CI sous le nom `coverage-report`.
+
+## SonarQube (qualite de code)
+
+Le job CI de scan SonarQube est configure dans le workflow et utilise `sonar-project.properties` a la racine du projet.
+
+Credentials requis dans GitHub Actions:
+
+- `SONAR_TOKEN`
+- `SONAR_HOST_URL`
+
+Ou les configurer:
+
+- GitHub repo > Settings > Secrets and variables > Actions > New repository secret
+
+Ou recuperer les credentials:
+
+- `SONAR_TOKEN`: dans SonarQube/SonarCloud > votre profil utilisateur > Security > Generate Token
+- `SONAR_HOST_URL`: URL de votre serveur SonarQube (exemple SonarCloud: `https://sonarcloud.io`)
 
 ## Couverture en local
 
