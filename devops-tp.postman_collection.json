@@ -1,0 +1,396 @@
+{
+  "info": {
+    "name": "DevOps TP API",
+    "description": "Postman collection for the DevOps TP greeting + persons API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8000",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Greetings",
+      "item": [
+        {
+          "name": "Hello World",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/hello-world",
+              "host": ["{{baseUrl}}"],
+              "path": ["hello-world"]
+            },
+            "description": "Returns a default formal English greeting for 'World'."
+          },
+          "response": []
+        },
+        {
+          "name": "List Supported Languages",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/greetings/languages",
+              "host": ["{{baseUrl}}"],
+              "path": ["greetings", "languages"]
+            },
+            "description": "Returns the list of supported language codes (en, es, fr)."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Greeting Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/greetings/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["greetings", "stats"]
+            },
+            "description": "Returns total greeting requests and a breakdown by language."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Greeting - Casual French",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Alice\",\n  \"language\": \"fr\",\n  \"audience\": \"casual\",\n  \"excited\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/greetings",
+              "host": ["{{baseUrl}}"],
+              "path": ["greetings"]
+            },
+            "description": "Casual French greeting. Returns: 'Salut Alice.'"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Greeting - Formal English",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Bob\",\n  \"language\": \"en\",\n  \"audience\": \"formal\",\n  \"excited\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/greetings",
+              "host": ["{{baseUrl}}"],
+              "path": ["greetings"]
+            },
+            "description": "Formal English greeting. Returns: 'Hello Bob.'"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Greeting - VIP Spanish (excited)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Carlos\",\n  \"language\": \"es\",\n  \"audience\": \"vip\",\n  \"excited\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/greetings",
+              "host": ["{{baseUrl}}"],
+              "path": ["greetings"]
+            },
+            "description": "VIP Spanish greeting with excitement. Returns: 'Bienvenido, estimado Carlos!'"
+          },
+          "response": []
+        },
+        {
+          "name": "Create Greeting - Defaults only",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Diana\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/greetings",
+              "host": ["{{baseUrl}}"],
+              "path": ["greetings"]
+            },
+            "description": "Only name provided; language defaults to 'fr', audience to 'casual', excited to false."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Greeting - 400 Unsupported Language",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Eve\",\n  \"language\": \"de\",\n  \"audience\": \"casual\",\n  \"excited\": false\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/greetings",
+              "host": ["{{baseUrl}}"],
+              "path": ["greetings"]
+            },
+            "description": "Should return 400 — 'de' (German) is not a supported language."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Greeting - 422 Missing Name",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"language\": \"en\",\n  \"audience\": \"casual\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/greetings",
+              "host": ["{{baseUrl}}"],
+              "path": ["greetings"]
+            },
+            "description": "Should return 422 — 'name' is required."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Greeting - 422 Invalid Audience",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Frank\",\n  \"language\": \"en\",\n  \"audience\": \"unknown\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/greetings",
+              "host": ["{{baseUrl}}"],
+              "path": ["greetings"]
+            },
+            "description": "Should return 422 — 'audience' must be one of: casual, formal, vip."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Persons",
+      "item": [
+        {
+          "name": "Create Person",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Alice\",\n  \"age\": 30,\n  \"language\": \"fr\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/persons",
+              "host": ["{{baseUrl}}"],
+              "path": ["persons"]
+            },
+            "description": "Creates a new person. Returns 201 with the created resource."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Person - second entry",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Bob\",\n  \"age\": 45,\n  \"language\": \"en\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/persons",
+              "host": ["{{baseUrl}}"],
+              "path": ["persons"]
+            },
+            "description": "Creates a second person for testing list and stats."
+          },
+          "response": []
+        },
+        {
+          "name": "List All Persons",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/persons",
+              "host": ["{{baseUrl}}"],
+              "path": ["persons"]
+            },
+            "description": "Returns all persons stored in the database."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Person Stats",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/persons/stats",
+              "host": ["{{baseUrl}}"],
+              "path": ["persons", "stats"]
+            },
+            "description": "Returns total count, average age, and breakdown by language."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Person by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/persons/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["persons", "1"]
+            },
+            "description": "Returns the person with id=1."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Person",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Alice Updated\",\n  \"age\": 31,\n  \"language\": \"en\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/persons/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["persons", "1"]
+            },
+            "description": "Fully replaces the person with id=1."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Person",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/persons/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["persons", "1"]
+            },
+            "description": "Deletes the person with id=1. Returns 204 No Content."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Person - 404 Not Found",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/persons/999",
+              "host": ["{{baseUrl}}"],
+              "path": ["persons", "999"]
+            },
+            "description": "Should return 404 — no person with id=999."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Person - 422 Missing Fields",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ghost\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/persons",
+              "host": ["{{baseUrl}}"],
+              "path": ["persons"]
+            },
+            "description": "Should return 422 — 'age' and 'language' are required."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Person - 422 Invalid Age",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Ghost\",\n  \"age\": -5,\n  \"language\": \"fr\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/persons",
+              "host": ["{{baseUrl}}"],
+              "path": ["persons"]
+            },
+            "description": "Should return 422 — age must be >= 0."
+          },
+          "response": []
+        },
+        {
+          "name": "Greet Person (langue supportée)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/persons/2/greet",
+              "host": ["{{baseUrl}}"],
+              "path": ["persons", "2", "greet"]
+            },
+            "description": "Salue la personne id=2. Langue et niveau de respect déterminés automatiquement depuis le profil (age < 18 → casual, 18-64 → formal, 65+ → vip). Langue fallback vers 'en' si non supportée."
+          },
+          "response": []
+        },
+        {
+          "name": "Greet Person (langue non supportée → fallback en)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/persons/3/greet",
+              "host": ["{{baseUrl}}"],
+              "path": ["persons", "3", "greet"]
+            },
+            "description": "Si la personne a une langue non supportée (ex: 'de'), la salutation est retournée en anglais."
+          },
+          "response": []
+        },
+        {
+          "name": "Greet Person - 404 Not Found",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/persons/999/greet",
+              "host": ["{{baseUrl}}"],
+              "path": ["persons", "999", "greet"]
+            },
+            "description": "Should return 404 — no person with id=999."
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
