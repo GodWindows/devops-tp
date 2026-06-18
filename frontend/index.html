@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DevOps TP — Console API</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>DevOps TP <span class="badge">API Console</span></h1>
+    <p class="subtitle">Interface de test pour les services <strong>greetings</strong> et <strong>persons</strong>.</p>
+    <nav class="tabs">
+      <button class="tab active" data-tab="greetings">Greetings</button>
+      <button class="tab" data-tab="persons">Persons</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ===================== GREETINGS ===================== -->
+    <section id="greetings" class="panel active">
+      <div class="card">
+        <h2>Salutation rapide</h2>
+        <div class="row">
+          <button id="hello-world-btn">GET /hello-world</button>
+          <button id="languages-btn" class="ghost">GET /greetings/languages</button>
+          <button id="greeting-stats-btn" class="ghost">GET /greetings/stats</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Créer une salutation <code>POST /greetings</code></h2>
+        <form id="greeting-form" class="grid">
+          <label>Nom
+            <input type="text" name="name" value="Alice" required maxlength="100" />
+          </label>
+          <label>Langue
+            <select name="language" id="greeting-language">
+              <option value="fr">fr</option>
+              <option value="en">en</option>
+              <option value="es">es</option>
+              <option value="de">de (non supportée → 400)</option>
+            </select>
+          </label>
+          <label>Audience
+            <select name="audience">
+              <option value="casual">casual</option>
+              <option value="formal">formal</option>
+              <option value="vip">vip</option>
+            </select>
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="excited" /> Excité (!)
+          </label>
+          <button type="submit" class="primary">Envoyer</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===================== PERSONS ===================== -->
+    <section id="persons" class="panel">
+      <div class="card">
+        <h2>Créer une personne <code>POST /persons</code></h2>
+        <form id="person-form" class="grid">
+          <input type="hidden" name="id" id="person-id" />
+          <label>Nom
+            <input type="text" name="name" value="Alice" required maxlength="100" />
+          </label>
+          <label>Âge
+            <input type="number" name="age" value="30" required min="0" max="150" />
+          </label>
+          <label>Langue
+            <input type="text" name="language" value="fr" required minlength="2" maxlength="10" />
+          </label>
+          <div class="row form-actions">
+            <button type="submit" class="primary" id="person-submit">Créer</button>
+            <button type="button" class="ghost" id="person-reset">Annuler l'édition</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card">
+        <div class="row spread">
+          <h2>Personnes</h2>
+          <div class="row">
+            <button id="person-refresh-btn" class="ghost">Rafraîchir</button>
+            <button id="person-stats-btn" class="ghost">GET /persons/stats</button>
+          </div>
+        </div>
+        <table id="persons-table">
+          <thead>
+            <tr><th>ID</th><th>Nom</th><th>Âge</th><th>Langue</th><th class="actions-col">Actions</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <p id="persons-empty" class="empty hidden">Aucune personne. Créez-en une ci-dessus.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== RESULT CONSOLE ===================== -->
+  <aside class="console">
+    <div class="row spread">
+      <h2>Réponse</h2>
+      <span id="status-pill" class="pill">—</span>
+    </div>
+    <pre id="output">En attente d'une requête…</pre>
+  </aside>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,4 +1,8 @@
+import os
+
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 
 import database
 import entities.person  # noqa: F401 — registers PersonModel with Base metadata
@@ -6,6 +10,8 @@ from controllers.greeting_controller import GreetingController
 from controllers.person_controller import PersonController
 from services.greeting_service import GreetingService
 from services.greeting_template_service import GreetingTemplateService
+
+FRONTEND_DIR = os.path.join(os.path.dirname(__file__), "frontend")
 
 
 def create_app() -> FastAPI:
@@ -20,6 +26,14 @@ def create_app() -> FastAPI:
 
     application.include_router(greeting_controller.router)
     application.include_router(person_controller.router)
+
+    @application.get("/", include_in_schema=False)
+    def index() -> RedirectResponse:
+        return RedirectResponse(url="/ui/")
+
+    if os.path.isdir(FRONTEND_DIR):
+        application.mount("/ui", StaticFiles(directory=FRONTEND_DIR, html=True), name="ui")
+
     return application
 
 app = create_app()

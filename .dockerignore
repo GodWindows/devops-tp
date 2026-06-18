@@ -1,0 +1,12 @@
+.venv/
+.git/
+.github/
+.idea/
+**/__pycache__/
+*.pyc
+data/
+*.db
+.coverage
+coverage.xml
+tests/
+devops-tp.postman_collection.json
