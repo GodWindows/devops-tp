@@ -157,5 +157,5 @@ function escapeHtml(s) {
   );
 }
 
-// Initial load
-loadPersons();
+// Initial load (top-level await — app.js is loaded as an ES module)
+await loadPersons();
