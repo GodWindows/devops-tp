@@ -224,7 +224,7 @@ coverage report -m
 coverage xml
 
 # tests frontend + couverture (coverage/lcov.info)
-npm ci
+npm ci --ignore-scripts
 npm run coverage
 ```
 
