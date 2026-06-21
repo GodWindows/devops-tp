@@ -192,8 +192,11 @@ tests/unit/    # tests unitaires + tests avec mocks (aucun serveur, aucune base 
   test_person_greeting_service.py   # mapping âge→audience + fallback de langue, repo mocké
   test_person_repository.py         # CRUD + stats sur SQLite en mémoire
 tests/web/     # tests d'intégration HTTP via fastapi.testclient.TestClient
+  test_app.py                       # redirection / -> /ui/ et montage de l'UI statique
   test_greeting_controller.py
   test_person_controller.py         # endpoints /persons, get_db surchargé sur SQLite en mémoire
+tests/frontend/                     # tests du frontend (Vitest + jsdom)
+  app.test.js                       # helpers + interactions DOM avec fetch mocké
 ```
 
 - **Tests mock** : `test_person_service.py` et `test_person_greeting_service.py` isolent la
@@ -204,15 +207,25 @@ tests/web/     # tests d'intégration HTTP via fastapi.testclient.TestClient
 - **Tests web** : `TestClient` envoie de vraies requêtes HTTP ; la dépendance `get_db` est
   surchargée pour pointer vers une base SQLite en mémoire isolée par test.
 
+- **Tests frontend** : `tests/frontend/app.test.js` charge `frontend/app.js` dans un DOM
+  jsdom avec `fetch` mocké et simule les interactions (formulaires, boutons, onglets,
+  rendu des réponses). Lancés avec [Vitest](https://vitest.dev/) ; la couverture est
+  exportée au format LCOV pour SonarCloud.
+
 ```bash
-# tous les tests
+# tests Python
 python -m unittest discover -s tests/unit -p "test_*.py"
 python -m unittest discover -s tests/web -p "test_*.py"
 
-# avec couverture
+# couverture Python (coverage.xml)
 coverage run -m unittest discover -s tests/unit -p "test_*.py"
 coverage run --append -m unittest discover -s tests/web -p "test_*.py"
 coverage report -m
+coverage xml
+
+# tests frontend + couverture (coverage/lcov.info)
+npm ci
+npm run coverage
 ```
 
 ## Tests Postman
@@ -225,10 +238,11 @@ Importer `devops-tp.postman_collection.json` dans Postman. La variable `{{baseUr
 
 Le pipeline CI (GitHub Actions) execute:
 
-- 3 etapes de verification:
+- 4 etapes de verification:
 	- tests unitaires (`tests/unit`)
 	- tests web (`tests/web`)
-	- couverture de code (`coverage.xml`)
+	- tests frontend Vitest (`tests/frontend`, couverture `coverage/lcov.info`)
+	- couverture de code Python (`coverage.xml`)
 - 1 etape de qualite de code SonarQube (si credentials presents)
 
 La couverture est informative uniquement: elle n'est pas bloquante et ne fait pas echouer le workflow, quel que soit le resultat.

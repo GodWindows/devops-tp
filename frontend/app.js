@@ -36,10 +36,16 @@ function setStatus(label, cls) {
   statusPill.className = "pill" + (cls ? " " + cls : "");
 }
 
-function statusClass(status) {
+export function statusClass(status) {
   if (status >= 200 && status < 300) return "ok";
   if (status >= 400 && status < 500) return "warn";
   return "err";
+}
+
+// Read a form control by its name attribute. Using elements.namedItem avoids
+// clashes with HTMLFormElement's own properties (e.g. a field named "name").
+function field(form, name) {
+  return form.elements.namedItem(name);
 }
 
 // ---------------------------------------------------------------- Tabs
@@ -67,10 +73,10 @@ document.getElementById("greeting-form").addEventListener("submit", (e) => {
   e.preventDefault();
   const f = e.target;
   call("POST", "/greetings", {
-    name: f.name.value,
-    language: f.language.value,
-    audience: f.audience.value,
-    excited: f.excited.checked,
+    name: field(f, "name").value,
+    language: field(f, "language").value,
+    audience: field(f, "audience").value,
+    excited: field(f, "excited").checked,
   });
 });
 
@@ -115,9 +121,9 @@ async function loadPersons() {
 
 function startEdit(p) {
   personIdField.value = p.id;
-  personForm.name.value = p.name;
-  personForm.age.value = p.age;
-  personForm.language.value = p.language;
+  field(personForm, "name").value = p.name;
+  field(personForm, "age").value = p.age;
+  field(personForm, "language").value = p.language;
   personSubmit.textContent = `Mettre à jour #${p.id}`;
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -132,9 +138,9 @@ personForm.addEventListener("submit", async (e) => {
   e.preventDefault();
   const id = personIdField.value;
   const payload = {
-    name: personForm.name.value,
-    age: Number(personForm.age.value),
-    language: personForm.language.value,
+    name: field(personForm, "name").value,
+    age: Number(field(personForm, "age").value),
+    language: field(personForm, "language").value,
   };
   if (id) {
     await call("PUT", `/persons/${id}`, payload);
@@ -151,7 +157,7 @@ document.getElementById("person-stats-btn").addEventListener("click", () =>
   call("GET", "/persons/stats")
 );
 
-function escapeHtml(s) {
+export function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
   );
