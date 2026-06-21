@@ -1,0 +1,17 @@
+.venv/
+.git/
+.github/
+.idea/
+**/__pycache__/
+*.pyc
+data/
+*.db
+.coverage
+coverage.xml
+tests/
+devops-tp.postman_collection.json
+node_modules/
+coverage/
+package.json
+package-lock.json
+vitest.config.js

@@ -1,3 +1,10 @@
 **/__pycache__/
 data/
 *.db
+.venv/
+.coverage
+coverage.xml
+.idea/
+.claude/
+node_modules/
+coverage/
